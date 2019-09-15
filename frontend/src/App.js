@@ -36,9 +36,11 @@ class App extends React.Component{
       frameStartPos: 0,
       frameEndPos: gameWindowWidth,
       gameWidth: gameWindowWidth,
-      isPaused: false
+      isPaused: true,
+      isGameOver: false
     }
     this.resume = this.resume.bind(this);
+    this.restart = this.restart.bind(this);
   }
 
   resume() {
@@ -46,6 +48,11 @@ class App extends React.Component{
       isPaused: false
     })
   }
+
+  restart() {
+    document.location.reload();
+  }
+
 
   frameUpdate = () => {
     if(!this.state.isPaused) {
@@ -111,7 +118,6 @@ class App extends React.Component{
                 arr.push([false, 0, 10])
               }
               prev.isPaused = true;
-              // alert('Change positions, round 1 Over')
               return {p1score: p1,
                 p2score: p2,
                 round: 2,
@@ -132,9 +138,8 @@ class App extends React.Component{
           if(prev.round===2)
           {
             const str=p1>p2?1:2
-              alert('Player 1: '+p1+'    Player 2: '+p2)
-              alert('Game Over!! Payer '+str+ ' wins! Plese Refresh')
-              clearInterval(id)
+              prev.isGameOver = true
+              prev.isPaused = true
           }
           
         }
@@ -157,7 +162,6 @@ class App extends React.Component{
                 arr.push([false, 0, 10])
               }
               prev.isPaused = true;
-              // alert('Change positions, round 1 Over')
               return {p1score: p1,
                 p2score: p2,
                 round: 2,
@@ -178,10 +182,8 @@ class App extends React.Component{
           if(prev.round===2)
           {
             p2+=50
-            const str=p1>p2?1:2
-              alert('Player 1: '+p1+'    Player 2: '+p2)
-              alert('Game Over!! Payer '+str+ ' wins! Plese Refresh')
-              clearInterval(id)
+            prev.isGameOver = true
+            prev.isPaused = true
           }
         }
         
@@ -222,7 +224,6 @@ class App extends React.Component{
               }
               depth=-500
               prev.isPaused = true;
-              // alert('Change positions, round 1 Over')
               return {p1score: p1,
                 p2score: p2,
                 round: 2,
@@ -241,10 +242,8 @@ class App extends React.Component{
             }
             if(newpilot===4 && prev.round===2){
               depth=-500
-              const str=p1>p2?1:2
-              alert('Player 1: '+p1+'    Player 2: '+p2)
-              alert('Game Over!! Payer '+str+ ' wins! Plese Refresh') 
-              clearInterval(id)
+              prev.isGameOver = true
+              prev.isPaused = true
             }
             if(newpilot<4){
               pos=prev.frameStartPos
@@ -338,7 +337,7 @@ class App extends React.Component{
           {soldierArr}
           <Gun angle={this.state.gunangle} leftPos={this.state.frameStartPos + (this.state.gameWidth / 2)} />
           {bulletarray}
-          <Info resume={this.resume} isPaused={this.state.isPaused}></Info>
+          <Info p1score={this.state.p1score} p2score={this.state.p2score} resume={this.resume} restart={this.restart} isPaused={this.state.isPaused} isGameOver={this.state.isGameOver} round={this.state.round}></Info>
         </div>
         <Player className="player" score={this.state.p2score} playerName={"Player 2"}></Player>
       </div>
