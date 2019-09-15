@@ -27,7 +27,8 @@ body {
 .player{
   width: 200px;
   float: left;
-  background-color: blue;
+  background: #466368;
+  background: linear-gradient(#648880, #293f50);
   height: 734px;
   text-align: center;
   color: #eee;
@@ -43,6 +44,18 @@ body {
 
 .player .player-name{
   font-size: 20px;
+}
+
+.info{
+  background: #466368;
+  background: linear-gradient(#648880, #293f50);
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  position: absolute;
+  width: 720px;
+  top: 400px;
+  left: 20px;
 }
 
 .screen{

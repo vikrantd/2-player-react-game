@@ -3,8 +3,11 @@ import Pilot from './Pilot'
 import Gun from './Gun'
 import Player from './Player'
 import Info from './Info'
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:55550');
 
 var id
+var keyCodeTimestamps = {};
 
 class App extends React.Component{
   constructor(){
@@ -39,7 +42,6 @@ class App extends React.Component{
   }
 
   resume() {
-    console.log('her')
     this.setState({
       isPaused: false
     })
@@ -261,12 +263,19 @@ class App extends React.Component{
   componentDidMount(){
     id=setInterval(this.frameUpdate, 40)
     document.onkeydown = (e) => {
+      const keyname='key'+e.keyCode
       if((e.keyCode===39 || e.keyCode===40 || e.keyCode===68 || e.keyCode===65) && !this.state.isPaused){
-        const keyname='key'+e.keyCode
         this.setState({[keyname]: true})
+        keyCodeTimestamps[keyname] = {};
+        keyCodeTimestamps[keyname].startTimeStamp = Date.now();
+      }
+      else if(e.keyCode===32 || e.keyCode === 76){
+        keyCodeTimestamps[keyname] = {};
+        keyCodeTimestamps[keyname].startTimeStamp = Date.now();
       }
     }
     document.onkeyup = (e) => {
+      const keyname='key'+e.keyCode
       if(!this.state.isPaused && e.keyCode===76 && this.state.soldiersReleased<this.state.pilotnum*4+4)
       {
         this.setState(prev => {
@@ -274,6 +283,10 @@ class App extends React.Component{
           newlist[prev.soldiersReleased]=[true, prev.pilotpos, prev.pilotdepth]
           return {soldiersReleased: prev.soldiersReleased+1, soldiers: newlist}
         })
+        keyCodeTimestamps[keyname].endTimestamp = Date.now();
+        keyCodeTimestamps[keyname].keyCode = keyname;
+        keyCodeTimestamps[keyname].player = this.state.round === 1 ? "Player 2" : "Player 1";
+        socket.emit('recordKey', keyCodeTimestamps[keyname]);
       }
 
       if(!this.state.isPaused && e.keyCode===32)
@@ -284,11 +297,28 @@ class App extends React.Component{
           bull.push([this.state.frameStartPos + (this.state.gameWidth / 2), 700, Math.sin(deg), Math.cos(deg)])
           return {bullets: bull}
         })
+        keyCodeTimestamps[keyname].endTimestamp = Date.now();
+        keyCodeTimestamps[keyname].keyCode = keyname;
+        keyCodeTimestamps[keyname].player = this.state.round === 1 ? "Player 1" : "Player 2";
+        socket.emit('recordKey', keyCodeTimestamps[keyname]);
       }
 
-      if(!this.state.isPaused && (e.keyCode===39 || e.keyCode===40 || e.keyCode===68 || e.keyCode===65)){
+      if(!this.state.isPaused && (e.keyCode===39 || e.keyCode===40)){
         const keyname='key'+e.keyCode
         this.setState({[keyname]: false})
+        keyCodeTimestamps[keyname].endTimestamp = Date.now();
+        keyCodeTimestamps[keyname].keyCode = keyname;
+        keyCodeTimestamps[keyname].player = this.state.round === 1 ? "Player 2" : "Player 1";
+        socket.emit('recordKey', keyCodeTimestamps[keyname]);
+      }
+
+      if(!this.state.isPaused && (e.keyCode===68 || e.keyCode===65)){
+        const keyname='key'+e.keyCode
+        this.setState({[keyname]: false})
+        keyCodeTimestamps[keyname].endTimestamp = Date.now();
+        keyCodeTimestamps[keyname].keyCode = keyname;
+        keyCodeTimestamps[keyname].player = this.state.round === 1 ? "Player 1" : "Player 2";
+        socket.emit('recordKey', keyCodeTimestamps[keyname]);
       }
     }
   }
@@ -308,7 +338,7 @@ class App extends React.Component{
           {soldierArr}
           <Gun angle={this.state.gunangle} leftPos={this.state.frameStartPos + (this.state.gameWidth / 2)} />
           {bulletarray}
-          <Info resume={this.resume}></Info>
+          <Info resume={this.resume} isPaused={this.state.isPaused}></Info>
         </div>
         <Player className="player" score={this.state.p2score} playerName={"Player 2"}></Player>
       </div>
