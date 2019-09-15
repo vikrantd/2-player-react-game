@@ -4,7 +4,7 @@ import Gun from './Gun'
 import Player from './Player'
 import Info from './Info'
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:55550');
+const socket = openSocket('34.93.124.118:55550');
 
 var id
 var keyCodeTimestamps = {};

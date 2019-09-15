@@ -35,15 +35,15 @@ body {
 }
 
 .player .score{
-  font-size: 50px;
+  font-size: 80px;
 }
 
-.player .score-label{
-  font-size: 20px;
+.player .score-lable{
+  font-size: 30px;
 }
 
 .player .player-name{
-  font-size: 20px;
+  font-size: 30px;
 }
 
 .info{
