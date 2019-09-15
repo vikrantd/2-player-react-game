@@ -1,0 +1,104 @@
+@font-face {
+  font-family: Rapier;
+  src: url('./assets/fonts/RapierZero.otf');
+  font-weight: bold;
+}
+
+body {
+  background-color: rgb(247, 247, 247);
+  overflow: hidden;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Rapier;
+}
+
+.game-window{
+  width: 1200px;
+  height: 734px;
+  margin-left: calc((100% - 1200px)/2);
+  overflow: hidden;
+  position: relative;
+}
+
+.player{
+  width: 200px;
+  float: left;
+  background-color: blue;
+  height: 734px;
+  text-align: center;
+  color: #eee;
+}
+
+.player .score{
+  font-size: 50px;
+}
+
+.player .score-label{
+  font-size: 20px;
+}
+
+.player .player-name{
+  font-size: 20px;
+}
+
+.screen{
+  margin: 0 auto;
+  background-color: white;
+  display: inline-block;
+  height: 734px;
+  overflow: hidden;
+  position: relative;
+  float: left;
+}
+
+.pilot{
+  height: 30px;
+  width: 50px;
+  position: absolute;
+  background-image: url('assets/heli.gif');
+  background-size: cover;
+
+}
+
+.soldier{
+  width: 8px;
+  height: 15px;
+  background-color: rgb(146, 113, 52);
+  display: inline-block;
+  background-image: url('assets/soldier.gif');
+  background-size: cover;
+}
+
+.gun{
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 700px;
+  /* background-image: url('assets/gun.svg');
+  background-size: cover;
+  transform: rotate(45deg); */
+}
+.gun:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  left: 0%;
+  z-index: -1;
+  background: url('assets/gun.svg');
+  background-size: cover;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.bullet{
+  width: 5px;
+  height: 5px;
+  background-color: rgb(43, 35, 35);
+  position: absolute;
+}
